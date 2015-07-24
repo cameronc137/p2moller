@@ -15,6 +15,7 @@ class qsimIO;
 class qsimDetectorConstruction;
 class qsimEventAction;
 class qsimPrimaryGeneratorAction;
+class qsimGlobalField;
 class qsimSteppingAction;
 
 class G4UIcmdWithAnInteger;
@@ -29,6 +30,7 @@ class qsimMessenger : public G4UImessenger {
        	~qsimMessenger();
 
 	void SetIO( qsimIO *io ){ fIO = io; }
+	void SetMagField( qsimGlobalField *f ){ fField = f; }
 	void SetPriGen( qsimPrimaryGeneratorAction *pg ){ fprigen = pg; }
 	void SetDetCon( qsimDetectorConstruction *dc ){ fdetcon= dc; }
 	void SetEvAct( qsimEventAction *ev ){ fevact = ev; }
@@ -41,16 +43,19 @@ class qsimMessenger : public G4UImessenger {
 	qsimDetectorConstruction *fdetcon;
 	qsimEventAction *fevact;
 	qsimPrimaryGeneratorAction *fprigen;
+	qsimGlobalField *fField;
 	qsimSteppingAction *fStepAct;
 
 	G4UIdirectory *fRemollDir;
 	
 	G4UIcmdWithAnInteger *seedCmd;
 	G4UIcmdWithAString   *fileCmd;
-	//
-	G4UIcmdWithAnInteger *fStandModeCmd;
-	G4UIcmdWithAnInteger *fSourceModeCmd;
-	//
+	
+	G4UIcmdWithAString	*newfieldCmd;
+	G4UIcmdWithAString	*fieldScaleCmd;
+	G4UIcmdWithAString	*fieldCurrCmd;
+
+
 	G4UIcmdWithADoubleAndUnit *fXminCmd;
 	G4UIcmdWithADoubleAndUnit *fXmaxCmd;
 	G4UIcmdWithADoubleAndUnit *fYminCmd;

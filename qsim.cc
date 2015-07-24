@@ -16,6 +16,7 @@
 #include "qsimEventAction.hh"
 #include "qsimSteppingAction.hh"
 #include "qsimOpticalPhysics.hh"
+//#include "qsimPhysicsList.hh"
 
 #include "qsimDetectorConstruction.hh"
 
@@ -144,6 +145,7 @@ int main(int argc, char** argv){
 
     }
 
+    //qsimRunData *rundata = qsimRun::GetRun()->GetData();
 
 #ifdef G4VIS_USE
     // Visualization, if you choose to have it!
@@ -192,8 +194,11 @@ int main(int argc, char** argv){
 	/* Copy contents of macro into buffer to be written out
 	 * into ROOT file
 	 * */
+		
+	//rundata->SetMacroFile(argv[1]);
 
 	UI->ApplyCommand(command+fileName);
+	//qsimRun::GetRun()->GetData()->Print();
     }
 
     //if one used the GUI then delete it
@@ -201,6 +206,8 @@ int main(int argc, char** argv){
     delete visManager;
 #endif
 
+    // Initialize Run Manager	
+    // runManager->Initialize();
 
     return 0;
 }

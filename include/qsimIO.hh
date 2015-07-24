@@ -15,6 +15,8 @@ class TTree;
 
 class qsimDetectorHit;
 class qsimScintDetectorHit;
+class qsinEvent;
+
 
 #define __IO_MAXHIT 10000
 #define __FILENAMELEN 255
@@ -63,6 +65,13 @@ class qsimIO {
 	Double_t fEvPart_Py;
 	Double_t fEvPart_Pz;
 	Int_t fEvPart_PID;
+	
+	Double_t fBmX;
+	Double_t fBmY;
+	Double_t fBmZ;
+	Double_t fBmdX;
+	Double_t fBmdY;
+	Double_t fBmdZ;
 
 
 	//  DetectorHit

@@ -8,6 +8,7 @@
 class G4ParticleGun;
 class G4Event;
 class qsimIO;
+//class qsimVEventGen;
 class qsimEvent;
 
 class qsimPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
@@ -20,23 +21,23 @@ class qsimPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     void GeneratePrimaries(G4Event* anEvent);
     G4ParticleGun* GetParticleGun();
     void SetIO( qsimIO *io ){ fIO = io; }
-		bool Thetaspectrum(double );
-		bool pspectrum(double );
-		//void SourceModeSet();
-		void SourceModeSet(G4int );
+	bool Thetaspectrum(double );
+	bool pspectrum(double );
+	//void SourceModeSet();
+	void SourceModeSet(G4int );
 
-	private:
+  private:
     G4ParticleGun* fParticleGun;
-		G4int fSourceMode;
+	G4int fSourceMode;
 
     qsimEvent *fDefaultEvent;
     qsimIO *fIO;
 
   public:
-		G4double fXmin, fXmax, fYmin, fYmax;
+	G4double fXmin, fXmax, fYmin, fYmax;
     G4double fZ;
     G4double fEmin, fEmax;
-		G4double fthetaMin, fthetaMax;
+	G4double fthetaMin, fthetaMax;
 };
 
 #endif

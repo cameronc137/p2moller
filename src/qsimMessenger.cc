@@ -10,6 +10,7 @@
 #include "qsimEventAction.hh"
 #include "qsimPrimaryGeneratorAction.hh"
 #include "qsimSteppingAction.hh"
+#include "qsimGlobalField.hh"
 
 #include "G4UImanager.hh"
 #include "G4UIdirectory.hh"
@@ -26,6 +27,7 @@ qsimMessenger::qsimMessenger(){
     fdetcon       = NULL;
     fevact        = NULL;
     fprigen       = NULL;
+    fField        = NULL;
     fStepAct      = NULL;
 
     fRemollDir = new G4UIdirectory("/qsim/");
@@ -39,17 +41,18 @@ qsimMessenger::qsimMessenger(){
     seedCmd->SetGuidance("Set random engine seed");
     seedCmd->SetParameterName("seed", false);
 
-		// new
+    newfieldCmd = new G4UIcmdWithAString("/qsim/addfield",this);
+    newfieldCmd->SetGuidance("Add magnetic field");
+    newfieldCmd->SetParameterName("filename", false);
 
-		fStandModeCmd = new G4UIcmdWithAnInteger("/qsim/fStandMode",this);
-		fStandModeCmd->SetGuidance("Set fStandMode to an option");
-		fStandModeCmd->SetParameterName("standmode", false);
+    fieldScaleCmd = new G4UIcmdWithAString("/qsim/scalefield",this);
+    fieldScaleCmd->SetGuidance("Scale magnetic field");
+    fieldScaleCmd->SetParameterName("filename", false);
 
-		fSourceModeCmd = new G4UIcmdWithAnInteger("/qsim/fSourceMode",this);
-		fSourceModeCmd->SetGuidance("Set fSourceMode to an option");
-		fSourceModeCmd->SetParameterName("sourcemode", false);
+    fieldCurrCmd = new G4UIcmdWithAString("/qsim/magcurrent",this);
+    fieldCurrCmd->SetGuidance("Scale magnetic field by current");
+    fieldCurrCmd->SetParameterName("filename",false);
 
-		// old
 
     fXminCmd = new G4UIcmdWithADoubleAndUnit("/qsim/xmin", this);
     fXminCmd->SetGuidance("Set x range minimum");
@@ -112,15 +115,42 @@ void qsimMessenger::SetNewValue(G4UIcommand* cmd, G4String newValue){
 	CLHEP::HepRandom::setTheSeed(seed);
     }
 
-		if (cmd == fStandModeCmd ) {
-	G4int x = fStandModeCmd->GetNewIntValue(newValue);
-	fdetcon->StandModeSet(x);
+	
+	if( cmd == newfieldCmd ){
+		fField->AddNewField( newValue );
+	}
+
+	if( cmd == fieldScaleCmd ){
+		std::istringstream iss(newValue);
+
+		G4String scalefile, scalestr;
+		G4double scaleval;
+
+		iss >> scalefile;
+		iss >> scalestr;
+
+		scaleval = atof(scalestr.data());
+		fField->SetFieldScale( scalefile, scaleval );
+	}
+
+	if( cmd == fieldCurrCmd ){
+		std::istringstream iss(newValue);
+		G4String scalefile, scalestr, scaleunit;
+		G4double scaleval;
+
+		iss >> scalefile;
+		iss >> scalestr;
+		iss >> scaleunit;
+
+		if( scaleunit != "A"){
+			G4cerr << __FILE__ << " line " << __LINE__ << ":\n\tGraaaah - just put the current for " << scalefile << " in amps..." << G4endl;
+			exit(1);
 		}
-		
-		if (cmd == fSourceModeCmd ) {
-	G4int x = fSourceModeCmd->GetNewIntValue(newValue);
-	fprigen->SourceModeSet(x);
-		}
+
+		scaleval = atof(scalestr.data());
+		fField->SetMagnetCurrent( scalefile, scaleval );
+	}
+
 
     if( cmd == fXminCmd ){
 	G4double x = fXminCmd->GetNewDoubleValue(newValue);
