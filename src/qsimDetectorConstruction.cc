@@ -123,7 +123,7 @@ G4VPhysicalVolume* qsimDetectorConstruction::Construct()
 	rotWorld->rotateZ(0.*deg);
 
 	G4VPhysicalVolume* world_phys
-		= new G4PVPlacement(rotWorld,G4ThreeVector(0.,0.,0.),world_log,"World",0,false,0);
+		= new G4PVPlacement(NULL,G4ThreeVector(0.,0.,0.),world_log,"World",0,false,0);
 	
 	/////
 	// Detector system intialization
